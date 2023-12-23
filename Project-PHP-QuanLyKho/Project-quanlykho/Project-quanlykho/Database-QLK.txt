@@ -1,0 +1,125 @@
+CREATE DATABASE DB_quanlykho;
+USE DB_quanlykho;
+
+
+CREATE TABLE DonViTinh(
+	Id int(11) PRIMARY KEY auto_increment,
+    	DonVi varchar(100)
+);
+INSERT INTO DonViTinh(DonVi) VALUES ("Chai");
+INSERT INTO DonViTinh(DonVi) VALUES ("Bao");
+INSERT INTO DonViTinh(DonVi) VALUES ("Viên");
+CREATE TABLE NhaCungCap(
+	Id int(11) PRIMARY KEY auto_increment,
+    	TenNCC varchar(100),
+	DienThoai varchar(20),
+	Email varchar(50),
+	DiaChi varchar(100)
+);
+INSERT INTO NhaCungCap(TenNCC,DienThoai,Email,DiaChi) VALUES ("Đông Á","1900023","donga@gmail.com","33 XVNT");
+
+CREATE TABLE SanPham(
+	Id int(11) PRIMARY KEY auto_increment,
+   	TenSP varchar(100),
+	IdDVT int,
+	IdNCC int,
+	GiaMua int,
+	GiaBan int,
+	SoLuong int,
+	FOREIGN KEY (IdDVT) REFERENCES DonViTinh(Id),
+	FOREIGN KEY (IdNCC) REFERENCES NhaCungCap(Id)
+);
+INSERT INTO SanPham(TenSP,IdDVT,IdNCC,GiaMua,GiaBan,SoLuong) VALUES ("Tôn",1,1,15000,20000,50);
+CREATE TABLE NhanVien(
+	Id int(11) PRIMARY KEY auto_increment,
+    	TenNV varchar(100),
+	DienThoai varchar(20),
+	Email varchar(50),
+	DiaChi varchar(100),
+	TaiKhoan varchar(50),
+	MatKhau varchar(50),
+	IsActive varchar(1)
+);
+INSERT INTO NhanVien(TenNV,DienThoai,Email,DiaChi,TaiKhoan,MatKhau,IsActive) VALUES ("Nguyen Thanh Binh","0395342134","binhnt.it28","33 xô viết nghệ tĩnh","admin","21232f297a57a5a743894a0e4a801fc3","1");
+CREATE TABLE KhachHang(
+	Id int(11) PRIMARY KEY auto_increment,
+    	TenKH varchar(100),
+	DienThoai varchar(20),
+	Email varchar(50),
+	DiaChi varchar(100)
+);
+INSERT INTO KhachHang(TenKH,DienThoai,Email,DiaChi) VALUES ("Nguyen Thanh Binh","0395342134","binhnt.it28","33 xô viết nghệ tĩnh");
+CREATE TABLE DonBan(
+	Id int(11) PRIMARY KEY auto_increment,
+    	NgayBan datetime,
+	IdNV int,
+	IdKH int,
+	Tong int,
+	TrangThai varchar(1),
+FOREIGN KEY (IdNV) REFERENCES NhanVien(Id),
+FOREIGN KEY (IdKH) REFERENCES KhachHang(Id)
+);
+Insert into DonBan(NgayBan,IdNV,IdKH,Tong) Values ("2021-03-14",1,1,250000);
+CREATE TABLE ChiTietBan(
+	Id int(11) PRIMARY KEY auto_increment,
+    	IdDonBan int,
+	IdSP int,
+	GiaMua int,
+	GiaBan int,
+	SoLuong int,
+	ThanhTien int,
+FOREIGN KEY (IdDonBan) REFERENCES DonBan(Id),
+FOREIGN KEY (IdSP) REFERENCES SanPham(Id)
+);
+
+CREATE TABLE DonMua(
+	Id int(11) PRIMARY KEY auto_increment,
+    	NgayMua datetime,
+	IdNV int,
+	IdNCC int,
+	ThanhTien int,
+	TrangThai varchar(1),
+FOREIGN KEY (IdNV) REFERENCES NhanVien(Id),
+FOREIGN KEY (IdNCC) REFERENCES NhaCungCap(Id)
+);
+
+CREATE TABLE ChiTietMua(
+	Id int(11) PRIMARY KEY auto_increment,
+    	IdDonMua int,
+	TenSP varchar(100),
+	IdDVT int,
+	GiaMua int,
+	SoLuong int,
+	ThanhTien int,
+FOREIGN KEY (IdDonMua) REFERENCES DonMua(Id),
+FOREIGN KEY (IdDVT) REFERENCES DonViTinh(Id)
+);
+
+CREATE TABLE Quyen(
+	Id int(11) PRIMARY KEY auto_increment,
+    	TenQuyen varchar(50)
+);
+
+CREATE TABLE DanhSachQuyen(
+	Id int(11) PRIMARY KEY auto_increment,
+	IdNV int,
+	IdQuyen int,
+FOREIGN KEY (IdNV) REFERENCES NhanVien(Id),
+FOREIGN KEY (IdQuyen) REFERENCES Quyen(Id)
+);
+INSERT INTO Quyen(TenQuyen) VALUES ("admin");
+INSERT INTO DanhSachQuyen(IdNV,IdQuyen) VALUES (1,1);
+--chạy từ phía này lên--
+
+
+
+-- dưới này xóa đi ---
+SELECT ds.Id ,nv.TenNV ,q.TenQuyen
+FROM danhsachquyen ds
+JOIN nhanvien nv
+JOIN quyen q 
+ON ds.IdNV = nv.Id AND ds.IdQuyen = q.Id
+
+format tiền number_format($item->GiaBan, 0,"." , ",")
+giờ date('d/m/Y', 1:48 AM 14/03/2021($item->NgayBan))
+sap xep nguoc SELECT * FROM `donvitinh` ORDER BY Id DESC
